@@ -1,0 +1,10 @@
+rootProject.name = 'multiproject_exam'
+
+include 'service-user'
+include 'service-movie'
+include 'service-showtime'
+include 'service-booking'
+include 'service-config'
+include 'service-gateway'
+include 'service-register'
+include 'service-admin'
