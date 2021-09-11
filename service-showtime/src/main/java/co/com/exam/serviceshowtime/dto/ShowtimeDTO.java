@@ -35,5 +35,5 @@ public class ShowtimeDTO
 	@NotEmpty(message = "La lista de peliculas no puede estar vacio")
 	private String movieIds;
 
-	private String movies;
+	private List<Movie> movies;
 }

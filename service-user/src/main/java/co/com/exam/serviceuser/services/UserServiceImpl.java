@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService
 	public String delete(final User user)
 	{
 		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		Booking booking = modelMapper.map(bookingClient.findByUserId(user.getId()).getData(), Booking.class);
 
 		if (Objects.nonNull(booking))

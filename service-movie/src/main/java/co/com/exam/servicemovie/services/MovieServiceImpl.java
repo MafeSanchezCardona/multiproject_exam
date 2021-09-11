@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,14 +40,15 @@ public class MovieServiceImpl implements MovieService
 	public String delete(final Movie movie)
 	{
 		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
 		List<Booking> bookings = modelMapper.map(bookingClient.findAll().getData(), new TypeToken<ArrayList<Booking>>() {}.getType());
-		bookings.stream().filter(booking -> booking.getMovieIds().contains(String.valueOf(movie.getId()))).collect(Collectors.toList());
+		List<Booking> bookingsFilter = bookings.stream().filter(booking -> booking.getMovieIds().contains(String.valueOf(movie.getId()))).collect(Collectors.toList());
 
 		List<Showtime> showtimes = modelMapper.map(showtimeClient.findAll().getData(), new TypeToken<ArrayList<Showtime>>() {}.getType());
-		showtimes.stream().filter(showtime -> showtime.getMovieIds().contains(String.valueOf(movie.getId()))).collect(Collectors.toList());
+		List<Showtime> showtimesFilter = showtimes.stream().filter(showtime -> showtime.getMovieIds().contains(String.valueOf(movie.getId()))).collect(Collectors.toList());
 
-		if (CollectionUtils.isEmpty(bookings) && CollectionUtils.isEmpty(showtimes)) {
+		if (CollectionUtils.isEmpty(bookingsFilter) && CollectionUtils.isEmpty(showtimesFilter)) {
 			movieRepository.delete(movie);
 			return "Se elimino exitosamente";
 		} else {
